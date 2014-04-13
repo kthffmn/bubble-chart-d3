@@ -9,10 +9,11 @@ var DATA = {"name":"bevs","children":[
 	          {"name":"wine","size":38}
       		]};
 
-// var bubble = d3.layout.pack()
-// 	.sort(null)
-// 	.size([SIZE, SIZE])
-// 	.padding(1.5);
+var bubble = d3.layout.pack()
+	.sort(null)								 // arranged in the order given
+	.size([SIZE, SIZE])
+	.padding(1.5)
+	.value(function(d) { return d.size; } ); // pack layout expects "value" but JSON stores this as "size", this returns size wherever value is called
 
 var svg = d3.select('body')
 	.append('svg')
@@ -22,7 +23,7 @@ var svg = d3.select('body')
 function update(data) {
 	// var node will be some sort of confusing d3 object, it binds the data with elements of class 'node'
 	var node = svg.selectAll('.node')
-		.data(data.children, function(d) { return d.name; });  // data.children b/c we're not running var bubble thing
+		.data(bubble.nodes(data), function(d) { return d.name; });  // data.children b/c we're not running var bubble thing
     
     // for every new element, we want to make a new svg circle element, have to give it class 'node' for when we want to update later
 	// ENTER
