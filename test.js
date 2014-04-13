@@ -9,6 +9,8 @@ var DATA = {"name":"bevs","children":[
 	          {"name":"wine","size":38}
       		]};
 
+var color = d3.scale.category10();
+
 var bubble = d3.layout.pack()
 	.sort(null)								 // arranged in the order given
 	.size([SIZE, SIZE])
@@ -40,7 +42,7 @@ function update(data) {
 		.attr('r' , function(d) { return d.r; })	 		// updates size of radius when values change
 		.attr('cy', function(d) { return d.y; }) 			// y position
 		.attr('cx', function(d) { return d.x; }) 			// x position
-		.style('fill', 'gray');
+		.style('fill', function(d) { return color(d.name); });
 
 	node.exit()
 		.transition()
@@ -51,17 +53,17 @@ function update(data) {
 update(DATA);
 
 setTimeout(function() {
-	DATA.children[0].size = 100; // changes size of tea to 100
+	DATA.children[0].size = 100; 						// changes size of tea to 100
 	update(DATA);
 }, 1000);
 
 setTimeout(function() {
-	DATA.children.pop(); 		// removes wine from JSON
+	DATA.children.pop(); 								// removes wine from JSON
 	update(DATA);
 }, 2000);
 
 setTimeout(function() {
-	DATA.children.push({name: "espresso", size: 100}); 		// removes wine from JSON
+	DATA.children.push({name: "wine", size: 100}); 		// adds wine back
 	update(DATA);
 }, 3000);
 
