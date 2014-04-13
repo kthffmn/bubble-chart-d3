@@ -21,10 +21,14 @@ var svg = d3.select('body')
 	.attr('height', SIZE);
 
 function update(data) {
+
+	// returns all the leaf nodes, throw out ones that have chidren (in this case BEVs)
+	var data = bubble.nodes(data).filter(function(d) { return !d.children; });				
+
 	// var node will be some sort of confusing d3 object, it binds the data with elements of class 'node'
 	var node = svg.selectAll('.node')
-		.data(bubble.nodes(data), function(d) { return d.name; });  // data.children b/c we're not running var bubble thing
-    
+		.data(data, function(d) { return d.name; }) // data.children b/c we're not running var bubble thing
+
     // for every new element, we want to make a new svg circle element, have to give it class 'node' for when we want to update later
 	// ENTER
 	node.enter().append('circle')
@@ -33,9 +37,9 @@ function update(data) {
 
 	// UPDATE
 	node.transition()
-		.attr('r', function(d) { return d.size; }) 			//updates size of radius when values change
-		.attr('cy', function(d,i) { return 100*i + 100; }) 	// y position
-		.attr('cx', 200) 									// x position
+		.attr('r' , function(d) { return d.r; })	 		// updates size of radius when values change
+		.attr('cy', function(d) { return d.y; }) 			// y position
+		.attr('cx', function(d) { return d.x; }) 			// x position
 		.style('fill', 'gray');
 
 	node.exit()
@@ -57,7 +61,7 @@ setTimeout(function() {
 }, 2000);
 
 setTimeout(function() {
-	DATA.children.push({name: "espresso", size: 200}); 		// removes wine from JSON
+	DATA.children.push({name: "espresso", size: 100}); 		// removes wine from JSON
 	update(DATA);
 }, 3000);
 
