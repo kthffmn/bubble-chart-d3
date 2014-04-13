@@ -41,22 +41,35 @@ function update(data) {
 	enter.append('circle')
 		.attr('r', 0)											// start elements with radius of 0 to watch them grow using transition
 		.style('fill', function(d) { return color(d.name); });	// color elements when the enter as color won't change
+	enter.append('text')
+		.style('opacity', 0)
+		.style('fill', 'black')
+		.style('text-anchor', 'middle')
+		.text(function(d) { return d.name; });
+
 
 	// UPDATE
-	node.transition()
-		.attr('transform', function(d) {return 'translate(' + d.x + ',' + d.y + ')'; })
-		.select('circle')
+	var update = node.transition()
+		.attr('transform', function(d) {return 'translate(' + d.x + ',' + d.y + ')'; });
+
+	update.select('circle')
 			.attr('r' , function(d) { return d.r; });	 		// updates size of radius when values change
+	update.select('text')
+			.style('opacity', 1);
 
 	// EXIT
-	node.exit()
+	var exit = node.exit()
 		.transition()
-			.remove()
-				.select('circle').attr('r', 0);
+			.remove();
+	exit.select('circle').attr('r', 0);
+	exit.select('text').style('opacity', 0);
 
 }
 
 update(DATA);
+
+
+// this is just to prove that the animations will update, feel free to delete these when actually using this code
 
 setTimeout(function() {
 	DATA.children[0].size = 100; 						// changes size of tea to 100
