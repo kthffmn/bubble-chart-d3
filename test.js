@@ -32,22 +32,28 @@ function update(data) {
 		.data(data, function(d) { return d.name; }) // data.children b/c we're not running var bubble thing
 
     // for every new element, we want to make a new svg circle element, have to give it class 'node' for when we want to update later
+
 	// ENTER
-	node.enter().append('circle')
+	var enter = node.enter().append('g')
 		.attr('class', 'node')
-		.attr('r', 0);
+		.attr('transform', function(d) {return 'translate(' + d.x + ',' + d.y + ')'; });
+
+	enter.append('circle')
+		.attr('r', 0)											// start elements with radius of 0 to watch them grow using transition
+		.style('fill', function(d) { return color(d.name); });	// color elements when the enter as color won't change
 
 	// UPDATE
 	node.transition()
-		.attr('r' , function(d) { return d.r; })	 		// updates size of radius when values change
-		.attr('cy', function(d) { return d.y; }) 			// y position
-		.attr('cx', function(d) { return d.x; }) 			// x position
-		.style('fill', function(d) { return color(d.name); });
+		.attr('transform', function(d) {return 'translate(' + d.x + ',' + d.y + ')'; })
+		.select('circle')
+			.attr('r' , function(d) { return d.r; });	 		// updates size of radius when values change
 
+	// EXIT
 	node.exit()
 		.transition()
-		.attr('r', 0)
-		.remove();
+			.remove()
+				.select('circle').attr('r', 0);
+
 }
 
 update(DATA);
@@ -66,10 +72,5 @@ setTimeout(function() {
 	DATA.children.push({name: "wine", size: 100}); 		// adds wine back
 	update(DATA);
 }, 3000);
-
-
-// node.enter().append('g')
-// 	.attr('class', 'node')
-// 	.attr('transform', function(d) {return 'translate(' + d.x + ',' + d.y + ')'; });
 
 
