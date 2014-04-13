@@ -32,7 +32,7 @@ node.enter().append('circle')
 	.attr('class', 'node')
 	.attr('cx', 200) 								// x position
 	.attr('cy', function(d,i) { return 100 * i; }) 	// y position
-	.attr('r', 50) 									// radius
+	.attr('r', function(d) { return d.size; }) 		// radius
 	.style('fill', 'gray');
 
 
