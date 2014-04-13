@@ -31,7 +31,7 @@ var node = svg.selectAll('.node')
 node.enter().append('circle')
 	.attr('class', 'node')
 	.attr('cx', 200) 								// x position
-	.attr('cy', function(d,i) { return 100 * i; }) 	// y position
+	.attr('cy', function(d,i) { return 100 * i + 100; }) 	// y position
 	.attr('r', function(d) { return d.size; }) 		// radius
 	.style('fill', 'gray');
 
